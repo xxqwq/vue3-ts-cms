@@ -16,9 +16,10 @@ import pinia from './store'
  * 在vie.config.ts中配置
  */
 import 'element-plus/theme-chalk/el-message.css'
-import registerIcons from './global/register-icons'
+import Icons from './global/register-icons'
+import registerStore from './store'
 const app = createApp(App)
-app.use(registerIcons)
+app.use(Icons)
+app.use(registerStore)
 app.use(router)
-app.use(pinia)
 app.mount('#app')

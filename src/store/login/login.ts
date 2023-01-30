@@ -4,6 +4,8 @@ import { defineStore } from 'pinia'
 import { localCache } from '@/utils/cache'
 import router from '@/router'
 import { LOGIN_TOKEN } from '@/global/constants'
+import type { RouteRecordRaw } from 'vue-router'
+import { mapMenusToRoutes } from '@/utils/map-menus'
 
 interface ILoginState {
   token: string,
@@ -12,9 +14,9 @@ interface ILoginState {
 }
 const useLoginStore = defineStore('login', {
   state: (): ILoginState => ({
-    token: localCache.getCache(LOGIN_TOKEN) ?? '',
-    userInfo: localCache.getCache('userInfo') ?? {},
-    userMenus: localCache.getCache('userMenus') ?? []
+    token: '',
+    userInfo: {},
+    userMenus: []
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
@@ -33,9 +35,28 @@ const useLoginStore = defineStore('login', {
       //进行本地缓存
       localCache.setCache('userInfo', userInfo)
       localCache.setCache('userMenus', userMenus)
+      //重要：动态添加路由
+      const routes = mapMenusToRoutes(userMenus)
+      routes.forEach(route => {
+        router.addRoute('main', route)
+      });
       //页面跳转(main)
       router.push("/main")
 
+    },
+    loadLocalCacheAction() {
+      const token = localCache.getCache(LOGIN_TOKEN)
+      const userInfo = localCache.getCache("userInfo")
+      const userMenus = localCache.getCache("userMenus")
+      if (token && userInfo && userMenus) {
+        this.token = token
+        this.userInfo = userInfo
+        this.userMenus = userMenus
+        const routes = mapMenusToRoutes(userMenus)
+        routes.forEach(route => {
+          router.addRoute('main', route)
+        });
+      }
     }
   }
 })
