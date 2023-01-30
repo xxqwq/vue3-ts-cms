@@ -1,5 +1,6 @@
 import { LOGIN_TOKEN } from "@/global/constants";
 import { localCache } from "@/utils/cache"
+import { firstMenu } from "@/utils/map-menus";
 import { createRouter, createWebHashHistory } from "vue-router"
 const router = createRouter({
   history: createWebHashHistory(),
@@ -55,9 +56,12 @@ const router = createRouter({
 router.beforeEach((to) => {
   const token = localCache.getCache(LOGIN_TOKEN)
   if (to.path.startsWith("/main") && !token) {
-      return '/login'
+    return '/login'
+  }
+  if (to.path === "/main") {
+    return firstMenu?.url
   }
   //要不要动态的加载路由
-  
+
 });
 export default router
