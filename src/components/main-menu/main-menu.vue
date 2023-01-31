@@ -75,7 +75,7 @@
 <script setup lang="ts">
 import useLoginStore from '@/store/login/login'
 import { firstMenu, mapPathToMenus } from '@/utils/map-menus'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 //获取动态的菜单
 const loginStore = useLoginStore()
@@ -95,8 +95,10 @@ function handleItemClick(item: any) {
 }
 //elmenu的默认菜单
 const route = useRoute()
-const pathMenu = mapPathToMenus(route.path, userMenus)
-const defaultActive = ref(pathMenu.id + '')
+const defaultActive = computed(() => {
+  const pathMenu = mapPathToMenus(route.path, userMenus)
+  return pathMenu.id + ''
+})
 </script>
 
 <style lang="less" scoped>
