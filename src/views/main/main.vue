@@ -64,6 +64,8 @@ function handleFoldChange(isFold: boolean) {
 
   .el-main {
     background-color: #f0f2f5;
+    // --main-padding: 20px;
+    // --el-main-padding: var(--main-padding);
   }
 }
 </style>

@@ -1,13 +1,22 @@
 <template>
   <div class="user">
-    <h2>user</h2>
+    <user-search />
+    <div class="content">
+      <div class="header"></div>
+      <div class="table"></div>
+      <div class="pagination"></div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import UserSearch from './c-cpns/user-search.vue'
 </script>
 
 <style lang="less" scoped>
-.user{
+.user {
+  color: red;
+  border-radius: 8px;
+  overflow: hidden;
 }
 </style>
