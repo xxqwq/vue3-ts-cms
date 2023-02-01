@@ -6,6 +6,7 @@ import router from '@/router'
 import { LOGIN_TOKEN } from '@/global/constants'
 import type { RouteRecordRaw } from 'vue-router'
 import { mapMenusToRoutes } from '@/utils/map-menus'
+import useMainStore from '../main/main'
 
 interface ILoginState {
   token: string,
@@ -35,6 +36,9 @@ const useLoginStore = defineStore('login', {
       //进行本地缓存
       localCache.setCache('userInfo', userInfo)
       localCache.setCache('userMenus', userMenus)
+      //请求role和department数据
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
       //重要：动态添加路由
       const routes = mapMenusToRoutes(userMenus)
       routes.forEach(route => {
