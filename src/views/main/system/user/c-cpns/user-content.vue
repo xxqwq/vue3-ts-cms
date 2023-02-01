@@ -2,7 +2,7 @@
   <div class="content">
     <div class="header">
       <h3 class="title">用户列表</h3>
-      <el-button type="primary">新建用户</el-button>
+      <el-button type="primary" @click="handleNewUserClick">新建用户</el-button>
     </div>
     <div class="table">
       <el-table :data="usersList" border style="width: 100%">
@@ -83,6 +83,8 @@ import { formatUTC } from '@/utils/format.ts'
 import { storeToRefs } from 'pinia'
 import useSystemStore from '@/store/main/system/system'
 import { ref } from 'vue'
+//定义事件
+const emit = defineEmits(['newClick'])
 const currentPage = ref(1)
 const pageSize = ref(10)
 const systemStore = useSystemStore()
@@ -109,6 +111,10 @@ function handleCurrentChange() {
 //删除操作
 function handleDeleteClick(id: number) {
   systemStore.deleteUserByIdAction(id)
+}
+//新建用户操作
+function handleNewUserClick() {
+  emit('newClick')
 }
 defineExpose({ fetchUserListData })
 </script>
