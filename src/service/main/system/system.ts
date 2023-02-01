@@ -7,3 +7,9 @@ export function getUsersListData(queryInfo: any) {
     data: queryInfo
   })
 }
+//删除用户
+export function deleteUserById(id: number) {
+  return myRequest.delete({
+    url:`/users/${id}`
+  })
+}

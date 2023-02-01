@@ -48,12 +48,20 @@
           }}</template></el-table-column
         >
         <el-table-column align="center" label="操作" width="180">
-          <el-button size="small" type="primary" text icon="Edit">
-            编辑
-          </el-button>
-          <el-button size="small" type="danger" text icon="Delete">
-            删除
-          </el-button>
+          <template #default="scope">
+            <el-button size="small" type="primary" text icon="Edit">
+              编辑
+            </el-button>
+            <el-button
+              size="small"
+              type="danger"
+              text
+              icon="Delete"
+              @click="handleDeleteClick(scope.row.id)"
+            >
+              删除
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -97,6 +105,10 @@ function handleSizeChange() {
 }
 function handleCurrentChange() {
   fetchUserListData()
+}
+//删除操作
+function handleDeleteClick(id: number) {
+  systemStore.deleteUserByIdAction(id)
 }
 defineExpose({ fetchUserListData })
 </script>
