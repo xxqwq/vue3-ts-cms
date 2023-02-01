@@ -1,4 +1,4 @@
-import { postUsersListData } from "@/service/main/system/system";
+import { getUsersListData } from "@/service/main/system/system";
 import { defineStore } from "pinia";
 import type { ISystemState } from "./type";
 const useSystemStore = defineStore('system', {
@@ -7,12 +7,14 @@ const useSystemStore = defineStore('system', {
     usersTotalCount: 0
   }),
   actions: {
-    async postUsersListAction() {
-      const usersListResult = await postUsersListData()
-      const { totalCount, list } = usersListResult.data
-      this.usersTotalCount = totalCount
+    async getUserListDataAction(queryInfo: any) {
+      // 1.请求用户列表数据
+      const userListResult = await getUsersListData(queryInfo)
+      const { list, totalCount } = userListResult.data
       this.usersList = list
-    }
+      this.usersTotalCount = totalCount
+    },
   }
 })
+
 export default useSystemStore
