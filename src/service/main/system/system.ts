@@ -13,3 +13,10 @@ export function deleteUserById(id: number) {
     url:`/users/${id}`
   })
 }
+//新建用户
+export function newUserData(userInfo:any) {
+  return myRequest.post({
+    url: '/users/',
+    data:userInfo
+  })
+}

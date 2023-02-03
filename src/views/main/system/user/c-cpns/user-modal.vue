@@ -22,16 +22,31 @@
             />
           </el-form-item>
           <el-form-item label="选择角色" prop="roleId">
-            <el-select v-model="formData.roleId" placeholder="请选择角色" />
+            <el-select
+              v-model="formData.roleId"
+              placeholder="请选择角色"
+              style="width: 100%"
+            >
+              <template v-for="item in entireRoles" :key="item.id">
+                <el-option :label="item.name" :value="item.id" /> </template
+            ></el-select>
           </el-form-item>
-          <el-form-item label="部门" prop="department">
-            <el-input v-model="formData.name" placeholder="请选择部门" />
+          <el-form-item label="部门" prop="departmentId">
+            <el-select
+              v-model="formData.departmentId"
+              placeholder="请选择部门"
+              style="width: 100%"
+            >
+              <template v-for="item in entireDepartments" :key="item.id">
+                <el-option :label="item.name" :value="item.id" />
+              </template>
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible = false">
+          <el-button type="primary" @click="handleConfirmClick">
             确定
           </el-button>
           <el-button @click="dialogVisible = false">取消</el-button>
@@ -42,6 +57,9 @@
 </template>
 
 <script setup lang="ts">
+import useMainStore from '@/store/main/main'
+import useSystemStore from '@/store/main/system/system'
+import { storeToRefs } from 'pinia'
 import { reactive, ref } from 'vue'
 //定义内部的属性
 const dialogVisible = ref(false)
@@ -51,11 +69,22 @@ const formData = reactive({
   password: '',
   cellphone: '',
   roleId: '',
-  department: ''
+  departmentId: ''
 })
+//获取角色和部门数据
+const mainStore = useMainStore()
+
+const { entireDepartments, entireRoles } = storeToRefs(mainStore)
 //定义设置可见性的方法
 function setModalVisible() {
   dialogVisible.value = true
+}
+//点击确认
+const systemStore = useSystemStore()
+function handleConfirmClick() {
+  dialogVisible.value = false
+  //创建新的用户
+  systemStore.newUserDataAction(formData)
 }
 defineExpose({ setModalVisible })
 </script>
