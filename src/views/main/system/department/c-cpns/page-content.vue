@@ -105,7 +105,7 @@ function handleCurrentChange() {
 }
 //删除操作
 function handleDeleteClick(id: number) {
-  systemStore.deleteUserByIdAction(id)
+  systemStore.deletePageByIdAction('department', id)
 }
 //新建用户操作
 function handleNewUserClick() {

@@ -1,6 +1,9 @@
 <template>
   <div class="department">
-    <page-search @query-click="handleQueryClick" />
+    <page-search
+      @query-click="handleQueryClick"
+      @reset-click="handleResetClick"
+    />
     <page-content ref="contentRef" />
   </div>
 </template>
@@ -13,6 +16,9 @@ import { ref } from 'vue'
 const contentRef = ref<InstanceType<typeof pageContent>>()
 function handleQueryClick(queryInfo: any) {
   contentRef.value?.fetchPageListData(queryInfo)
+}
+function handleResetClick(queryInfo: any) {
+  contentRef.value?.fetchPageListData()
 }
 </script>
 

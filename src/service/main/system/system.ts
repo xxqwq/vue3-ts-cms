@@ -34,3 +34,10 @@ export function postPageListData(pageName: string, queryInfo: any) {
     data: queryInfo
   })
 }
+
+//删除用户
+export function deletePageById(pageName: string, id: number) {
+  return myRequest.delete({
+    url: `/${pageName}/${id}`,
+  })
+}
