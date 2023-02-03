@@ -24,7 +24,19 @@
                   range-separator="-"
                   start-placeholder="开始时间"
                   end-placeholder="结束时间"
-                /> </template></el-form-item
+                />
+              </template>
+              <template v-if="item.type === 'select'">
+                <el-select
+                  v-model="searchForm[item.prop]"
+                  :placeholder="item.placeholder"
+                  style="width: 100%"
+                >
+                  <template v-for="option in item.options" :key="option.value">
+                    <el-option
+                      :label="option.label"
+                      :value="option.value"
+                    ></el-option> </template></el-select></template></el-form-item
           ></el-col> </template
       ></el-row>
     </el-form>
