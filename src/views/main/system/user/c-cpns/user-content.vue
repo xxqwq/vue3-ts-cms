@@ -49,7 +49,13 @@
         >
         <el-table-column align="center" label="操作" width="180">
           <template #default="scope">
-            <el-button size="small" type="primary" text icon="Edit">
+            <el-button
+              size="small"
+              type="primary"
+              text
+              icon="Edit"
+              @click="handleEditClick(scope.row)"
+            >
               编辑
             </el-button>
             <el-button
@@ -84,7 +90,7 @@ import { storeToRefs } from 'pinia'
 import useSystemStore from '@/store/main/system/system'
 import { ref } from 'vue'
 //定义事件
-const emit = defineEmits(['newClick'])
+const emit = defineEmits(['newClick', 'editClick'])
 const currentPage = ref(1)
 const pageSize = ref(10)
 const systemStore = useSystemStore()
@@ -115,6 +121,10 @@ function handleDeleteClick(id: number) {
 //新建用户操作
 function handleNewUserClick() {
   emit('newClick')
+}
+//编辑操作
+function handleEditClick(itemData: any) {
+  emit('editClick', itemData)
 }
 defineExpose({ fetchUserListData })
 </script>

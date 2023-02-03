@@ -1,6 +1,11 @@
 <template>
   <div class="modal">
-    <el-dialog v-model="dialogVisible" title="新建用户" width="30%" center>
+    <el-dialog
+      v-model="dialogVisible"
+      :title="isNewRef ? '新建用户' : '编辑用户'"
+      width="30%"
+      center
+    >
       <div class="form">
         <el-form :model="formData" label-width="80px"
           ><el-form-item label="用户名" prop="name">
@@ -12,7 +17,7 @@
               placeholder="请输入真实姓名"
             />
           </el-form-item>
-          <el-form-item label="密码" prop="password">
+          <el-form-item label="密码" prop="password" v-show="isNewRef">
             <el-input v-model="formData.password" placeholder="请输入密码" />
           </el-form-item>
           <el-form-item label="电话号码" prop="cellphone">
@@ -63,7 +68,7 @@ import { storeToRefs } from 'pinia'
 import { reactive, ref } from 'vue'
 //定义内部的属性
 const dialogVisible = ref(false)
-const formData = reactive({
+const formData = reactive<any>({
   name: '',
   realname: '',
   password: '',
@@ -71,20 +76,39 @@ const formData = reactive({
   roleId: '',
   departmentId: ''
 })
+const isNewRef = ref(true)
+const editData = ref()
 //获取角色和部门数据
 const mainStore = useMainStore()
 
 const { entireDepartments, entireRoles } = storeToRefs(mainStore)
 //定义设置可见性的方法
-function setModalVisible() {
+function setModalVisible(isNew: boolean = true, itemData?: any) {
   dialogVisible.value = true
+  isNewRef.value = isNew
+  if (!isNew && itemData) {
+    for (const key in formData) {
+      formData[key] = itemData[key]
+    }
+    editData.value = itemData
+  } else {
+    for (const key in formData) {
+      formData[key] = ''
+    }
+    editData.value = null
+  }
 }
 //点击确认
 const systemStore = useSystemStore()
 function handleConfirmClick() {
   dialogVisible.value = false
-  //创建新的用户
-  systemStore.newUserDataAction(formData)
+  if (!isNewRef.value && editData.value) {
+    //编辑数据
+    systemStore.editUserDataAction(editData.value.id, formData)
+  } else {
+    //创建新的用户
+    systemStore.newUserDataAction(formData)
+  }
 }
 defineExpose({ setModalVisible })
 </script>

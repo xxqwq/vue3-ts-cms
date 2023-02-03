@@ -10,13 +10,20 @@ export function getUsersListData(queryInfo: any) {
 //删除用户
 export function deleteUserById(id: number) {
   return myRequest.delete({
-    url:`/users/${id}`
+    url: `/users/${id}`
   })
 }
 //新建用户
-export function newUserData(userInfo:any) {
+export function newUserData(userInfo: any) {
   return myRequest.post({
     url: '/users/',
-    data:userInfo
+    data: userInfo
+  })
+}
+//编辑用户
+export function editUserData(id: number, userInfo: any) {
+  return myRequest.patch({
+    url: `/users/${id}`,
+    data: userInfo
   })
 }
