@@ -1,4 +1,4 @@
-import { deletePageById, deleteUserById, editUserData, getUsersListData, newUserData, postPageListData } from "@/service/main/system/system";
+import { deletePageById, deleteUserById, editPageData, editUserData, getUsersListData, newPageData, newUserData, postPageListData } from "@/service/main/system/system";
 import { defineStore } from "pinia";
 import type { ISystemState } from "./type";
 const useSystemStore = defineStore('system', {
@@ -42,6 +42,14 @@ const useSystemStore = defineStore('system', {
     },
     async deletePageByIdAction(pageName: string, id: number) {
       const deleteResult = await deletePageById(pageName, id)
+      this.postPageListAction(pageName, { offset: 0, size: 10 })
+    },
+    async newPageDataAction(pageName: string, pageInfo: any) {
+      const newResult = await newPageData(pageName, pageInfo)
+      this.postPageListAction(pageName, { offset: 0, size: 10 })
+    },
+    async editPageDataAction(pageName: string, id: number, queryInfo: any) {
+      const editResult = await editPageData(pageName, id, queryInfo)
       this.postPageListAction(pageName, { offset: 0, size: 10 })
     }
   }

@@ -35,9 +35,24 @@ export function postPageListData(pageName: string, queryInfo: any) {
   })
 }
 
-//删除用户
+//删除
 export function deletePageById(pageName: string, id: number) {
   return myRequest.delete({
     url: `/${pageName}/${id}`,
+  })
+}
+//新建
+export function newPageData(pageName: string, pageInfo: any) {
+  return myRequest.post({
+    url: `${pageName}`,
+    data: pageInfo
+  })
+}
+
+//编辑
+export function editPageData(pageName:string,id: number, pageInfo: any) {
+  return myRequest.patch({
+    url: `/${pageName}/${id}`,
+    data: pageInfo
   })
 }
