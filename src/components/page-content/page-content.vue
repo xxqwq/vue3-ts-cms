@@ -123,8 +123,10 @@ import { formatUTC } from '@/utils/format.ts'
 import { storeToRefs } from 'pinia'
 import useSystemStore from '@/store/main/system/system'
 import { ref } from 'vue'
+import contentConfig from '@/views/main/system/department/config/content.config'
 interface IProps {
   contentConfig: {
+    pageName: string
     header?: {
       title?: string
       btnTitle?: string
@@ -144,7 +146,7 @@ function fetchPageListData(formData: any = {}) {
   const offset = (currentPage.value - 1) * size
   const pageInfo = { size, offset }
   const queryInfo = { ...pageInfo, ...formData }
-  systemStore.postPageListAction('department', queryInfo)
+  systemStore.postPageListAction(contentConfig.pageName, queryInfo)
 }
 //发送action，请求pageList的数据
 fetchPageListData()
@@ -160,7 +162,7 @@ function handleCurrentChange() {
 }
 //删除操作
 function handleDeleteClick(id: number) {
-  systemStore.deletePageByIdAction('department', id)
+  systemStore.deletePageByIdAction(contentConfig.pageName, id)
 }
 //新建用户操作
 function handleNewUserClick() {
