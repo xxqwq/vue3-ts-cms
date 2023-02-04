@@ -29,7 +29,7 @@
               </template>
               <template v-if="item.type === 'select'">
                 <el-select
-                  v-model="formData[item.prop]"
+                  v-model="formData.parentId"
                   :placeholder="item.placeholder"
                   style="width: 100%"
                 >
@@ -65,6 +65,7 @@ import { reactive, ref } from 'vue'
 //定义props
 export interface IModalProps {
   modalConfig: {
+    pageName: string
     header: {
       newTitle: string
       editTitle: string
@@ -110,10 +111,14 @@ function handleConfirmClick() {
   dialogVisible.value = false
   if (!isNewRef.value && editData.value) {
     //编辑数据
-    systemStore.editPageDataAction('department', editData.value.id, formData)
+    systemStore.editPageDataAction(
+      props.modalConfig.pageName,
+      editData.value.id,
+      formData
+    )
   } else {
     //创建新的用户
-    systemStore.newPageDataAction('department', formData)
+    systemStore.newPageDataAction(props.modalConfig.pageName, formData)
   }
 }
 defineExpose({ setModalVisible })
