@@ -7,6 +7,11 @@ export function getEntireRoles() {
 }
 export function getEntireDepartment() {
   return myRequest.post({
-    url:'/department/list'
+    url: '/department/list'
+  })
+}
+export function getEntireMenus() {
+  return myRequest.post({
+    url: '/menu/list'
   })
 }

@@ -27,7 +27,7 @@
                   end-placeholder="结束时间"
                 />
               </template>
-              <template v-if="item.type === 'select'">
+              <template v-else-if="item.type === 'select'">
                 <el-select
                   v-model="formData.parentId"
                   :placeholder="item.placeholder"
@@ -37,7 +37,10 @@
                     <el-option
                       :label="option.label"
                       :value="option.value"
-                    ></el-option> </template></el-select></template
+                    ></el-option> </template></el-select
+              ></template>
+              <template v-else-if="item.type === 'custom'">
+                <slot :name="item.slotName"> </slot> </template
             ></el-form-item>
           </template>
         </el-form>
