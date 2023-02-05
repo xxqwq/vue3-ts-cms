@@ -73,6 +73,7 @@ export interface IModalProps {
     }
     formItems: any[]
   }
+  otherInfo?: any
 }
 const props = defineProps<IModalProps>()
 //定义内部的属性
@@ -110,16 +111,20 @@ function setModalVisible(isNew: boolean = true, itemData?: any) {
 const systemStore = useSystemStore()
 function handleConfirmClick() {
   dialogVisible.value = false
+  let infoData = formData
+  if (props.otherInfo) {
+    infoData = { ...infoData, ...props.otherInfo }
+  }
   if (!isNewRef.value && editData.value) {
     //编辑数据
     systemStore.editPageDataAction(
       props.modalConfig.pageName,
       editData.value.id,
-      formData
+      infoData
     )
   } else {
     //创建新的用户
-    systemStore.newPageDataAction(props.modalConfig.pageName, formData)
+    systemStore.newPageDataAction(props.modalConfig.pageName, infoData)
   }
 }
 defineExpose({ setModalVisible })
