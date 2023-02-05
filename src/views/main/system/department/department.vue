@@ -31,6 +31,8 @@ import contentConfig from './config/content.config'
 import modalConfig from './config/modal.config'
 import { computed, ref } from 'vue'
 import useMainStore from '@/store/main/main'
+import usePageContent from '@/hooks/usePageContent'
+import usePageModal from '@/hooks/usePageModal'
 //对modalconfig操作
 const modalConfigRef = computed(() => {
   const mainStore = useMainStore()
@@ -46,21 +48,9 @@ const modalConfigRef = computed(() => {
   return modalConfig
 })
 //点击搜索
-const contentRef = ref<InstanceType<typeof pageContent>>()
-function handleQueryClick(queryInfo: any) {
-  contentRef.value?.fetchPageListData(queryInfo)
-}
-function handleResetClick(queryInfo: any) {
-  contentRef.value?.fetchPageListData()
-}
+const { contentRef, handleQueryClick, handleResetClick } = usePageContent()
 //点击content，modal的操作
-const modalRef = ref<InstanceType<typeof pageModal>>()
-function handleNewBtnClick() {
-  modalRef.value?.setModalVisible()
-}
-function handleEditClick(itemData: any) {
-  modalRef.value?.setModalVisible(false, itemData)
-}
+const { modalRef, handleNewBtnClick, handleEditClick } = usePageModal()
 </script>
 
 <style scoped lang="less"></style>
