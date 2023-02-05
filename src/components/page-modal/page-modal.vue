@@ -57,8 +57,6 @@
 <script setup lang="ts">
 import useMainStore from '@/store/main/main'
 import useSystemStore from '@/store/main/system/system'
-import modalConfig from '@/views/main/system/department/config/modal.config'
-import type { TimelineItemProps } from 'element-plus'
 import { storeToRefs } from 'pinia'
 import { reactive, ref } from 'vue'
 // import type { IModalProps } from './type'
@@ -97,7 +95,7 @@ function setModalVisible(isNew: boolean = true, itemData?: any) {
     editData.value = itemData
   } else {
     for (const key in formData) {
-      const item = modalConfig.formItems.find(
+      const item = props.modalConfig.formItems.find(
         (item) => item.prop === key
       ) as any
       formData[key] = item ? item.initialValue : ''
