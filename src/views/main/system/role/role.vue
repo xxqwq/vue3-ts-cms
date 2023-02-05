@@ -18,6 +18,7 @@
     >
       <template #menulist>
         <el-tree
+          ref="treeRef"
           :data="entireMenus"
           show-checkbox
           node-key="id"
@@ -41,17 +42,28 @@ import usePageContent from '@/hooks/usePageContent'
 import usePageModal from '@/hooks/usePageModal'
 import useMainStore from '@/store/main/main'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
+import type { ElTree } from 'element-plus'
+import { mapMenuListToIds } from '@/utils/map-menus'
 const { contentRef, handleQueryClick, handleResetClick } = usePageContent()
-const { modalRef, handleNewBtnClick, handleEditClick } = usePageModal()
+const { modalRef, handleNewBtnClick, handleEditClick } =
+  usePageModal(editCallback)
 //获取完整的菜单
 const mainStore = useMainStore()
 const { entireMenus } = storeToRefs(mainStore)
 const otherInfo = ref({})
+
 function handleElTreeCheck(data1: any, data2: any) {
   const menuList = [...data2.checkedKeys, ...data2.halfCheckedKeys]
   console.log(menuList)
   otherInfo.value = { menuList }
+}
+const treeRef = ref<InstanceType<typeof ElTree>>()
+function editCallback(itemData: any) {
+  nextTick(() => {
+    const menuIds = mapMenuListToIds(itemData.menuList)
+    treeRef.value?.setCheckedKeys(menuIds)
+  })
 }
 </script>
 
