@@ -55,7 +55,6 @@ const otherInfo = ref({})
 
 function handleElTreeCheck(data1: any, data2: any) {
   const menuList = [...data2.checkedKeys, ...data2.halfCheckedKeys]
-  console.log(menuList)
   otherInfo.value = { menuList }
 }
 const treeRef = ref<InstanceType<typeof ElTree>>()

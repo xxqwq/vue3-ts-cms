@@ -5,19 +5,21 @@ import { localCache } from '@/utils/cache'
 import router from '@/router'
 import { LOGIN_TOKEN } from '@/global/constants'
 import type { RouteRecordRaw } from 'vue-router'
-import { mapMenusToRoutes } from '@/utils/map-menus'
+import { mapMenusToRoutes, mapMenuListToPermissions } from '@/utils/map-menus'
 import useMainStore from '../main/main'
 
 interface ILoginState {
   token: string,
   userInfo: any,
-  userMenus: any
+  userMenus: any,
+  permissions: string[]
 }
 const useLoginStore = defineStore('login', {
   state: (): ILoginState => ({
     token: '',
     userInfo: {},
-    userMenus: []
+    userMenus: [],
+    permissions: []
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
@@ -33,12 +35,16 @@ const useLoginStore = defineStore('login', {
       const userMenuResult = await getUserMenusByRoleId(this.userInfo.role.id)
       const userMenus = userMenuResult.data
       this.userMenus = userMenus
+
       //进行本地缓存
       localCache.setCache('userInfo', userInfo)
       localCache.setCache('userMenus', userMenus)
       //请求role和department数据
       const mainStore = useMainStore()
       mainStore.fetchEntireDataAction()
+      //重要：获取登录用户的所有按钮的权限
+      const permissions = mapMenuListToPermissions(userMenus)
+      this.permissions = permissions
       //重要：动态添加路由
       const routes = mapMenusToRoutes(userMenus)
       routes.forEach(route => {
@@ -56,6 +62,11 @@ const useLoginStore = defineStore('login', {
         this.token = token
         this.userInfo = userInfo
         this.userMenus = userMenus
+
+        //获取按钮权限
+        const permissions = mapMenuListToPermissions(userMenus)
+        this.permissions = permissions
+        
         const mainStore = useMainStore()
         mainStore.fetchEntireDataAction()
         const routes = mapMenusToRoutes(userMenus)
