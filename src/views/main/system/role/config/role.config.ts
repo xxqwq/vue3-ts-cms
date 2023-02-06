@@ -1,4 +1,5 @@
 const searchConfig = {
+  pageName: 'role',
   formItems: [{
     type: 'input',
     prop: 'name',
@@ -6,7 +7,7 @@ const searchConfig = {
     placeholder: '请输入查询的角色名称',
   }, {
     type: 'input',
-    prop: 'introduction',
+    prop: 'intro',
     label: '权限介绍',
     placeholder: '请输入查询的权限名'
   },

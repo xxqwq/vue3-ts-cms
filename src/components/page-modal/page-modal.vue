@@ -82,7 +82,7 @@ for (const item of props.modalConfig.formItems) {
   initialData[item.prop] = item.initialValue ?? ''
 }
 const dialogVisible = ref(false)
-const formData = reactive<any>({})
+const formData = reactive<any>(initialData)
 const isNewRef = ref(true)
 const editData = ref()
 //获取角色和部门数据

@@ -1,5 +1,6 @@
 import { deletePageById, deleteUserById, editPageData, editUserData, getUsersListData, newPageData, newUserData, postPageListData } from "@/service/main/system/system";
 import { defineStore } from "pinia";
+import useMainStore from "../main";
 import type { ISystemState } from "./type";
 const useSystemStore = defineStore('system', {
   state: (): ISystemState => ({
@@ -26,6 +27,7 @@ const useSystemStore = defineStore('system', {
       const userInfoResult = await newUserData(userInfo)
       //重新请求新的数据
       this.getUserListDataAction({ offset: 0, size: 10 })
+
     },
     async editUserDataAction(id: number, userInfo: any) {
       //更新用户数据
@@ -39,6 +41,7 @@ const useSystemStore = defineStore('system', {
       const { totalCount, list } = pageListResult.data
       this.pageList = list
       this.pageTotalCount = totalCount
+
     },
     async deletePageByIdAction(pageName: string, id: number) {
       const deleteResult = await deletePageById(pageName, id)
@@ -47,10 +50,16 @@ const useSystemStore = defineStore('system', {
     async newPageDataAction(pageName: string, pageInfo: any) {
       const newResult = await newPageData(pageName, pageInfo)
       this.postPageListAction(pageName, { offset: 0, size: 10 })
+      //获取完整的数据
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
     },
     async editPageDataAction(pageName: string, id: number, queryInfo: any) {
       const editResult = await editPageData(pageName, id, queryInfo)
       this.postPageListAction(pageName, { offset: 0, size: 10 })
+      //获取完整的数据
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
     }
   }
 })

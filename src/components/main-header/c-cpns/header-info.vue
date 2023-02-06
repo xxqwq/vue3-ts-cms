@@ -18,7 +18,7 @@
       <el-dropdown>
         <span class="user-info">
           <el-avatar :size="30" />
-          <span class="name">coderwhy</span>
+          <span class="name">{{ loginStore.userInfo.name }}</span>
           <el-icon class="el-icon--right">
             <arrow-down />
           </el-icon>
@@ -46,13 +46,16 @@
 
 <script setup lang="ts">
 import { LOGIN_TOKEN } from '@/global/constants'
+import useLoginStore from '@/store/login/login'
 import { localCache } from '@/utils/cache'
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
 function handleExitClick() {
   localCache.deleteCache(LOGIN_TOKEN)
   router.push('/login')
 }
+const loginStore = useLoginStore()
 </script>
 
 <style lang="less" scoped>

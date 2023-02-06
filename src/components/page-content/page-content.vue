@@ -2,7 +2,7 @@
   <div class="content">
     <div class="header">
       <h3 class="title">{{ contentConfig?.header?.title ?? '数据列表' }}</h3>
-      <el-button type="primary" @click="handleNewUserClick">{{
+      <el-button v-if="isCreate" type="primary" @click="handleNewUserClick">{{
         contentConfig?.header?.btnTitle ?? '新建数据'
       }}</el-button>
     </div>
@@ -37,6 +37,7 @@
                   text
                   icon="Edit"
                   @click="handleEditClick(scope.row)"
+                  v-if="isUpdate"
                 >
                   编辑
                 </el-button>
@@ -45,6 +46,7 @@
                   type="danger"
                   text
                   icon="Delete"
+                  v-if="isDelete"
                   @click="handleDeleteClick(scope.row.id)"
                 >
                   删除
@@ -128,6 +130,7 @@ import { formatUTC } from '@/utils/format.ts'
 import { storeToRefs } from 'pinia'
 import useSystemStore from '@/store/main/system/system'
 import { ref } from 'vue'
+import usePermissions from '@/hooks/usePermissions'
 interface IProps {
   contentConfig: {
     pageName: string
@@ -142,18 +145,36 @@ interface IProps {
 const props = defineProps<IProps>()
 //定义事件
 const emit = defineEmits(['newClick', 'editClick'])
+//获取是否有对应的增删改查的权限
+const isCreate = usePermissions(`${props.contentConfig.pageName}:create`)
+const isDelete = usePermissions(`${props.contentConfig.pageName}:delete`)
+const isUpdate = usePermissions(`${props.contentConfig.pageName}:update`)
+const isQuery = usePermissions(`${props.contentConfig.pageName}:query`)
 const currentPage = ref(1)
 const pageSize = ref(10)
 const systemStore = useSystemStore()
 //定义函数，用于发送网络请求
 function fetchPageListData(formData: any = {}) {
-  const size = pageSize.value
-  const offset = (currentPage.value - 1) * size
-  const pageInfo = { size, offset }
-  const queryInfo = { ...pageInfo, ...formData }
-  systemStore.postPageListAction(props.contentConfig.pageName, queryInfo)
+  if (isQuery) {
+    const size = pageSize.value
+    const offset = (currentPage.value - 1) * size
+    const pageInfo = { size, offset }
+    const queryInfo = { ...pageInfo, ...formData }
+    systemStore.postPageListAction(props.contentConfig.pageName, queryInfo)
+  }
 }
 //发送action，请求pageList的数据
+systemStore.$onAction(({ name, after }) => {
+  after(() => {
+    if (
+      name === 'deletePageByIdAction' ||
+      name === 'editPageDataAction' ||
+      name === 'newPageDataAction'
+    ) {
+      currentPage.value = 1
+    }
+  })
+})
 fetchPageListData()
 //获取pageList数据进行展示
 const { pageList, pageTotalCount } = storeToRefs(systemStore)
@@ -177,6 +198,8 @@ function handleNewUserClick() {
 function handleEditClick(itemData: any) {
   emit('editClick', itemData)
 }
+//监听systemStore的action被执行
+
 defineExpose({ fetchPageListData })
 </script>
 

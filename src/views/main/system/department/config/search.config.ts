@@ -1,4 +1,5 @@
 const searchConfig = {
+  page: 'department',
   formItems: [{
     type: 'input',
     prop: 'name',

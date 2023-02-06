@@ -1,5 +1,5 @@
 <template>
-  <div class="search">
+  <div class="search" v-if="isQuery">
     <!-- 输入搜索关键字的表单 -->
     <el-form
       :label-width="searchConfig.labelWidth ?? '80px'"
@@ -51,8 +51,11 @@
 </template>
 
 <script setup lang="ts">
+import usePermissions from '@/hooks/usePermissions'
+
 interface IProps {
   searchConfig: {
+    pageName: string
     labelWidth?: string
     formItems: any[]
   }
@@ -61,6 +64,7 @@ import type { ElForm } from 'element-plus'
 import { reactive, ref } from 'vue'
 
 const props = defineProps<IProps>()
+const isQuery = usePermissions(`${props.searchConfig.pageName}:query`)
 const initialForm: any = {}
 for (const item of props.searchConfig.formItems) {
   initialForm[item.prop] = item.initialValue ?? ''

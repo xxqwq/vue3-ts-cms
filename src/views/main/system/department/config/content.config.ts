@@ -21,12 +21,6 @@ const contentConfig = {
       type: 'normal', label: '上级部门', prop: 'parentId', width: '150px'
     },
     {
-      type: 'custom', label: '部门领导', prop: 'leader', width: '150px', slotName: 'leader'
-    },
-    {
-      type: 'custom', label: '上级部门', prop: 'parentId', width: '150px', slotName: 'parent'
-    },
-    {
       type: 'timer', label: '创建时间', prop: 'createAt',
     },
     {

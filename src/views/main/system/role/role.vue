@@ -46,8 +46,10 @@ import { nextTick, ref } from 'vue'
 import type { ElTree } from 'element-plus'
 import { mapMenuListToIds } from '@/utils/map-menus'
 const { contentRef, handleQueryClick, handleResetClick } = usePageContent()
-const { modalRef, handleNewBtnClick, handleEditClick } =
-  usePageModal(editCallback)
+const { modalRef, handleNewBtnClick, handleEditClick } = usePageModal(
+  newCallback,
+  editCallback
+)
 //获取完整的菜单
 const mainStore = useMainStore()
 const { entireMenus } = storeToRefs(mainStore)
@@ -58,6 +60,11 @@ function handleElTreeCheck(data1: any, data2: any) {
   otherInfo.value = { menuList }
 }
 const treeRef = ref<InstanceType<typeof ElTree>>()
+function newCallback() {
+  nextTick(() => {
+    treeRef.value?.setCheckedKeys([])
+  })
+}
 function editCallback(itemData: any) {
   nextTick(() => {
     const menuIds = mapMenuListToIds(itemData.menuList)

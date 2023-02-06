@@ -18,7 +18,12 @@
             />
           </el-form-item>
           <el-form-item label="密码" prop="password" v-show="isNewRef">
-            <el-input v-model="formData.password" placeholder="请输入密码" />
+            <el-input
+              v-model="formData.password"
+              placeholder="请输入密码"
+              type="password"
+              show-password
+            />
           </el-form-item>
           <el-form-item label="电话号码" prop="cellphone">
             <el-input
