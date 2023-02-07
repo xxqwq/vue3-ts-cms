@@ -7,30 +7,47 @@
       </el-tooltip>
     </div>
     <div class="content">
-      <span class="count">{{ number1 }}</span>
+      <span class="count" ref="count1Ref">{{ number1 }}</span>
     </div>
     <div class="footer">
       <span>{{ subtitle }}</span>
-      <span>{{ number2 }}</span>
+      <span ref="count2Ref">{{ number2 }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { CountUp } from 'countup.js'
 interface IProps {
+  amount?: string
   title?: string
   tips?: string
   number1?: number
   number2?: number
   subtitle?: string
 }
-withDefaults(defineProps<IProps>(), {
+const props = withDefaults(defineProps<IProps>(), {
   title: '商品总销量',
   tips: '所有的商品总销量',
   number1: 509989,
   number2: 509989,
   subtitle: '商品总销量'
 })
+const count1Ref = ref<HTMLElement>()
+const count2Ref = ref<HTMLElement>()
+const countOption = {
+  prefix: props.amount === 'saleroom' ? '￥' : ''
+}
+onMounted(() => {
+  const countup1 = new CountUp(count1Ref.value!, props.number1, countOption)
+  const countup2 = new CountUp(count2Ref.value!, props.number2, countOption)
+
+  countup1.start()
+  countup2.start()
+})
+//参数一：执行动画元素
+//参数二：数字增加到多少
 </script>
 
 <style lang="less" scoped>
@@ -57,9 +74,8 @@ withDefaults(defineProps<IProps>(), {
     font-size: 26px;
     color: rgba(0, 0, 0, 0.85);
     flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+
+    align-items: center;
   }
 
   .footer {
